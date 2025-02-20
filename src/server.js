@@ -2,6 +2,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 require("dotenv").config({ path: "props.env" });
 const pkmnRoutes = require("./routes/pkmn.routes");
+const userRoutes = require("./routes/user.routes");
+const authRoutes = require("./routes/auth.routes");
+const trainerRoutes = require("./routes/trainer.routes");
 
 const app = express();
 const port = 3000;
@@ -18,7 +21,9 @@ mongoose
 
 // Routes
 app.use("/api/pkmn", pkmnRoutes);
-// app.use("/users", userRouter); // Assure-toi d'importer le userRouter si tu l'utilises
+app.use("/api", userRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/trainer", trainerRoutes);
 
 // Lancement du serveur
 app.listen(port, () => {
