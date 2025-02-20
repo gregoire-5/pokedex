@@ -5,6 +5,8 @@ const pkmnRoutes = require("./routes/pkmn.routes");
 const userRoutes = require("./routes/user.routes");
 const authRoutes = require("./routes/auth.routes");
 const trainerRoutes = require("./routes/trainer.routes");
+const swaggerUi = require("swagger-ui-express");
+const YAML = require("yamljs");
 
 const app = express();
 const port = 3000;
@@ -24,6 +26,10 @@ app.use("/api/pkmn", pkmnRoutes);
 app.use("/api", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/trainer", trainerRoutes);
+
+// Charger la doc Swagger
+const swaggerDocument = YAML.load("./swagger.yaml");
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Lancement du serveur
 app.listen(port, () => {

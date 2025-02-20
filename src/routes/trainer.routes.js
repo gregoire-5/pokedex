@@ -8,5 +8,6 @@ router.post("/", authM, trainerController.createTrainer);
 router.get("/", authM, trainerController.getTrainer);
 router.put("/", authM, trainerController.updateTrainer);
 router.delete("/", authM, trainerController.deleteTrainer);
+router.post("/mark", authM, trainerController.markPokemon);
 
 module.exports = router;

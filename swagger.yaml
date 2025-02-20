@@ -1,0 +1,72 @@
+openapi: 3.0.0
+info:
+  title: Pokedex API
+  description: API pour gérer les Pokémon et les Dresseurs
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+    description: Serveur local
+
+paths:
+  /pkmn/search:
+    get:
+      summary: Recherche de Pokémon
+      parameters:
+        - name: partialName
+          in: query
+          description: Partie du nom du Pokémon à rechercher
+          schema:
+            type: string
+        - name: typeOne
+          in: query
+          description: Filtrer par type principal
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Liste des Pokémon trouvés
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        types:
+                          type: array
+                          items:
+                            type: string
+        "500":
+          description: Erreur serveur
+
+  /trainer:
+    post:
+      summary: Créer un dresseur
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                trainerName:
+                  type: string
+                imgUrl:
+                  type: string
+      responses:
+        "201":
+          description: Dresseur créé
+        "400":
+          description: Erreur de validation
+        "500":
+          description: Erreur serveur
