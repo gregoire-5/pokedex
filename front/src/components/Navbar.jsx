@@ -1,15 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import "../../public/styles/navbar.css";
 
 const Navbar = () => {
   const { user, logout, isLoading } = useAuth();
 
   return (
     <nav>
-      {/* Logo qui redirige vers la page d'accueil */}
       <Link to="/" className="logo">
-        <img src="/path/to/logo.png" alt="Logo" />
+        <img src="../../public/images/pokedex-logo.png" alt="Logo" />
       </Link>
 
       <div className="nav-links">
@@ -26,7 +26,6 @@ const Navbar = () => {
           </>
         ) : (
           <>
-            {/* <span>Bienvenue, {user.username}!</span> */}
             <button onClick={logout}>Déconnexion</button>
           </>
         )}

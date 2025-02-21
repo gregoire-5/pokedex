@@ -95,13 +95,11 @@ exports.markPokemon = async (req, res) => {
       return res.status(404).json({ message: "Dresseur non trouvé." });
     }
 
-    // Vérification que le Pokémon existe
     const pokemon = await Pokemon.findById(pokemonId);
     if (!pokemon) {
       return res.status(404).json({ message: "Pokémon non trouvé." });
     }
 
-    // Ajout du Pokémon dans la bonne liste
     if (isCaptured) {
       if (!trainer.pkmnCatch.includes(pokemonId)) {
         trainer.pkmnCatch.push(pokemonId);

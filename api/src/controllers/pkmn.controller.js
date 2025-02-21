@@ -1,6 +1,5 @@
 const Pokemon = require("../models/pkmn.model");
 
-// 📌 Ajouter un Pokémon (POST /pkmn)
 exports.createPokemon = async (req, res) => {
   try {
     const { name, imgUrl, description, types } = req.body;
@@ -9,18 +8,16 @@ exports.createPokemon = async (req, res) => {
       return res.status(400).json({ message: "Tous les champs sont requis." });
     }
 
-    // Vérifier si le Pokémon existe déjà
     const existingPokemon = await Pokemon.findOne({ name });
     if (existingPokemon) {
       return res.status(409).json({ message: "Ce Pokémon existe déjà." });
     }
 
-    // Créer un Pokémon
     const newPokemon = new Pokemon({
       name,
       imgUrl,
       description,
-      types: types.split(","), // Convertir string en tableau
+      types: types.split(","),
       regions: [],
     });
 
@@ -31,7 +28,6 @@ exports.createPokemon = async (req, res) => {
   }
 };
 
-// 📌 Ajouter une région à un Pokémon (POST /pkmn/region)
 exports.addRegionToPokemon = async (req, res) => {
   try {
     const { pokemonId, regionName, regionPokedexNumber } = req.body;
@@ -45,7 +41,6 @@ exports.addRegionToPokemon = async (req, res) => {
       return res.status(404).json({ message: "Pokémon introuvable." });
     }
 
-    // Vérifier si la région existe déjà
     const regionIndex = pokemon.regions.findIndex((r) => r.regionName === regionName);
     if (regionIndex !== -1) {
       pokemon.regions[regionIndex].regionPokedexNumber = regionPokedexNumber;
@@ -60,14 +55,13 @@ exports.addRegionToPokemon = async (req, res) => {
   }
 };
 
-// 📌 Rechercher des Pokémons (GET /pkmn/search)
 exports.searchPokemon = async (req, res) => {
   try {
     const { partialName, typeOne, page = 1, size = 20 } = req.query;
     let query = {};
 
     if (partialName) {
-      query.name = new RegExp(partialName, "i"); // Recherche insensible à la casse
+      query.name = new RegExp(partialName, "i");
     }
     if (typeOne) {
       query.types = typeOne.toUpperCase();
@@ -103,7 +97,6 @@ exports.getPokemon = async (req, res) => {
   }
 };
 
-// 📌 2.5 Supprimer un Pokémon (ADMIN uniquement)
 exports.deletePokemon = async (req, res) => {
   try {
     const { id } = req.query;
@@ -122,7 +115,6 @@ exports.deletePokemon = async (req, res) => {
   }
 };
 
-// 📌 2.6 Modifier un Pokémon (ADMIN uniquement)
 exports.updatePokemon = async (req, res) => {
   try {
     const { id, ...updateData } = req.query;
@@ -141,7 +133,6 @@ exports.updatePokemon = async (req, res) => {
   }
 };
 
-// 📌 2.7 Supprimer une région d'un Pokémon (ADMIN uniquement)
 exports.deletePokemonRegion = async (req, res) => {
   try {
     const { pkmnID, regionName } = req.query;
@@ -157,7 +148,7 @@ exports.deletePokemonRegion = async (req, res) => {
     pokemon.regions = pokemon.regions.filter(region => region.regionName !== regionName);
     await pokemon.save();
 
-    res.status(204).send(); // No Content
+    res.status(204).send();
   } catch (error) {
     res.status(500).json({ message: "Erreur serveur", error: error.message });
   }

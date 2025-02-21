@@ -26,8 +26,7 @@ const Login = () => {
       if (!response.ok) {
         throw new Error(data.message || "Connexion échouée");
       }
-
-      // Stocker l'utilisateur et le token
+      
       login(data);
       navigate("/");
     } catch (err) {

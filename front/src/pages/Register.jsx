@@ -17,7 +17,7 @@ const Register = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          username: name, // Correction ici
+          username: name,
           email,
           password,
         }),
@@ -32,7 +32,7 @@ const Register = () => {
       alert("Inscription réussie, vous pouvez vous connecter !");
       navigate("/login");
     } catch (err) {
-      setError(err.message); // Affiche l'erreur détaillée de l'API
+      setError(err.message);
     }
   };
 

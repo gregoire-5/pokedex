@@ -11,10 +11,9 @@ exports.createUser = async (req, res) => {
 };
 
 exports.getUser = (req, res) => {
-  const userIdFromToken = req.auth.userId; // L'ID de l'utilisateur connecté, extrait du token
-  const requestedId = req.params.id_or_email; // L'ID ou l'email demandé
+  const userIdFromToken = req.auth.userId;
+  const requestedId = req.params.id_or_email;
 
-  // Si l'utilisateur est connecté et qu'il tente d'accéder à ses propres informations
   if (userIdFromToken !== requestedId) {
     return res
       .status(403)
@@ -24,14 +23,13 @@ exports.getUser = (req, res) => {
       });
   }
 
-  // Si l'ID correspond, récupérer les informations de l'utilisateur
   User
     .findById(requestedId)
     .then((user) => {
       if (!user) {
         return res.status(404).json({ error: "Utilisateur non trouvé." });
       }
-      res.status(200).json(user); // Retourner les informations de l'utilisateur
+      res.status(200).json(user);
     })
     .catch((err) => res.status(500).json({ error: err }));
 };
@@ -73,7 +71,7 @@ exports.checkUser = (req, res) => {
 
 exports.getUserMe = async (req, res) => {
   try {
-    console.log("req.user:", req.user); // 🔍 Debug
+    console.log("req.user:", req.user);
 
     if (!req.user || !req.user.userId) {
       return res.status(401).json({ message: "Utilisateur non authentifié" });

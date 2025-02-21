@@ -1,0 +1,12 @@
+.pokemon-types {
+  display: flex;
+  gap: 10px;
+}
+
+.pokemon-type {
+  background-color: #f4b266;
+  padding: 5px 10px;
+  border-radius: 15px;
+  color: white;
+  font-weight: bold;
+}

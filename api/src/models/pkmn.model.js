@@ -38,6 +38,24 @@ const pokemonSchema = new mongoose.Schema({
       regionPokedexNumber: { type: Number, required: true },
     },
   ],
+  height: {
+    type: Number,
+    required: true,
+  },
+  weight: {
+    type: Number,
+    required: true,
+  },
+  soundPath: {
+    type: String,
+    required: true,
+    validate: {
+      validator: function (v) {
+        return /^https?:\/\/.+\.(mp3|wav|ogg)$/i.test(v);
+      },
+      message: "Veuillez entrer une URL de son valide",
+    },
+  },
 });
 
 const Pokemon = mongoose.model("Pokemon", pokemonSchema);

@@ -11,13 +11,13 @@ export const AuthProvider = ({ children }) => {
   });
 
   const [token, setToken] = useState(() => localStorage.getItem("token") || null);
-  const [isLoading, setIsLoading] = useState(true); // Ajout d'un état pour gérer le chargement
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (token && !user) {
       fetchUserData();
     } else {
-      setIsLoading(false); // S'arrêter si aucun token ou user déjà défini
+      setIsLoading(false);
     }
   }, [token]);
 
@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("user", JSON.stringify(data));
     } catch (error) {
       console.error("Erreur dans fetchUserData:", error);
-      logout(); // Déconnexion propre si le token est invalide
+      logout();
     } finally {
       setIsLoading(false);
     }

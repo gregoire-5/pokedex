@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post("/", authM, pokemonController.createPokemon);
 router.post("/region", authM, pokemonController.addRegionToPokemon);
-router.get("/search", authM, pokemonController.searchPokemon);
+router.get("/search", pokemonController.searchPokemon);
 router.get("/", authM, pokemonController.getPokemon);
 router.delete("/", authM, roleM("ADMIN"), pokemonController.deletePokemon);
 router.put("/", authM, roleM("ADMIN"), pokemonController.updatePokemon);
