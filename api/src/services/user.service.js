@@ -67,3 +67,9 @@ exports.getUserByUsername = async (username) => {
     throw err;
   }
 };
+
+exports.getUserByIdentifier = async (identifier) => {
+  return await User.findOne({
+    $or: [{ username: identifier }, { email: identifier }],
+  });
+};

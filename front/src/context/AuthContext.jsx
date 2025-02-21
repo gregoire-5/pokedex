@@ -1,37 +1,68 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useContext, useEffect } from "react";
 
-// Création du contexte
 const AuthContext = createContext();
 
-// Hook personnalisé pour utiliser le contexte
 export const useAuth = () => useContext(AuthContext);
 
-// Provider pour encapsuler l'application
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
 
-  // Vérifier s'il y a un utilisateur sauvegardé en localStorage (persistance)
+  const [token, setToken] = useState(() => localStorage.getItem("token") || null);
+  const [isLoading, setIsLoading] = useState(true); // Ajout d'un état pour gérer le chargement
+
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    if (token && !user) {
+      fetchUserData();
+    } else {
+      setIsLoading(false); // S'arrêter si aucun token ou user déjà défini
     }
-  }, []);
+  }, [token]);
 
-  // Fonction de connexion
-  const login = (userData) => {
-    setUser(userData);
-    localStorage.setItem('user', JSON.stringify(userData));
+  const fetchUserData = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch("http://localhost:3000/api/me", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Erreur lors de la récupération des infos utilisateur");
+      }
+
+      const data = await response.json();
+      setUser(data);
+      localStorage.setItem("user", JSON.stringify(data));
+    } catch (error) {
+      console.error("Erreur dans fetchUserData:", error);
+      logout(); // Déconnexion propre si le token est invalide
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  // Fonction de déconnexion
+  const login = (userData, authToken) => {
+    setUser(userData);
+    setToken(authToken);
+    localStorage.setItem("token", authToken);
+    localStorage.setItem("user", JSON.stringify(userData));
+  };
+
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('user');
+    setToken(null);
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, token, login, logout, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

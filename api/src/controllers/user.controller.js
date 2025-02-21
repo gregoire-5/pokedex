@@ -70,3 +70,23 @@ exports.getAllUsers = (req, res) => {
 exports.checkUser = (req, res) => {
   return res.status(204).send();
 };
+
+exports.getUserMe = async (req, res) => {
+  try {
+    console.log("req.user:", req.user); // 🔍 Debug
+
+    if (!req.user || !req.user.userId) {
+      return res.status(401).json({ message: "Utilisateur non authentifié" });
+    }
+
+    const user = await User.findById(req.user.userId);
+
+    if (!user) {
+      return res.status(404).json({ error: "Utilisateur non trouvé" });
+    }
+
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

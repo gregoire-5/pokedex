@@ -13,11 +13,14 @@ const Register = () => {
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/register", {
-        // Mets l'URL de ton API
+      const response = await fetch("http://localhost:3000/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({
+          username: name, // Correction ici
+          email,
+          password,
+        }),
       });
 
       const data = await response.json();
@@ -27,9 +30,9 @@ const Register = () => {
       }
 
       alert("Inscription réussie, vous pouvez vous connecter !");
-      navigate("/login"); // Redirige vers la page de connexion
+      navigate("/login");
     } catch (err) {
-      setError(err.message);
+      setError(err.message); // Affiche l'erreur détaillée de l'API
     }
   };
 

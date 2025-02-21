@@ -5,7 +5,8 @@ const authM = require("../middlewares/auth.middleware");
 const router = express.Router();
 
 router.get("/checkUser", authM, userController.checkUser);
-router.get("/:identifier", authM, userController.getUser);
+router.get("/me", authM, userController.getUserMe);
+router.get("/:id", authM, userController.getUser);
 router.put("/:id", authM, userController.updateUser);
 router.delete("/:id", authM, userController.deleteUser);
 
